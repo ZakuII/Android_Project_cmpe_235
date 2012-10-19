@@ -24,6 +24,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -128,6 +129,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
         @Override
         public Fragment getItem(int i) {
         	switch(i) {
+        	case 1: return new BarCodeFragment();
         	case 2: return new GpsSectionFragment();
         	}
             Fragment fragment = new DummySectionFragment();
@@ -157,6 +159,48 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
      * A dummy fragment representing a section of the app, but that simply displays dummy text.
      */
     
+    public static class BarCodeFragment extends Fragment {
+
+    	EditText PhoneNum;
+    	Button send;
+    	
+		@Override
+		public void onActivityCreated(Bundle savedInstanceState) {
+			// TODO Auto-generated method stub
+			super.onActivityCreated(savedInstanceState);
+		}
+
+		@Override
+		public void onCreate(Bundle savedInstanceState) {
+			// TODO Auto-generated method stub
+			super.onCreate(savedInstanceState);
+		}
+
+		@Override
+		public View onCreateView(LayoutInflater inflater, ViewGroup container,
+				Bundle savedInstanceState) {
+			// TODO Auto-generated method stub
+			View mLayout = inflater.inflate(R.layout.activity_barcode, container, false);
+			
+			PhoneNum = (EditText) mLayout.findViewById (R.id.phoneNum);
+			send = (Button) mLayout.findViewById(R.id.send);
+			
+			return mLayout;
+		}
+
+		@Override
+		public void onPause() {
+			// TODO Auto-generated method stub
+			super.onPause();
+		}
+
+		@Override
+		public void onResume() {
+			// TODO Auto-generated method stub
+			super.onResume();
+		}
+    	
+    }
     public static class GpsSectionFragment extends Fragment implements LocationListener {
     	public GpsSectionFragment() {
     	}
@@ -181,14 +225,16 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
     	
     	@Override
     	public void onPause() {
-    		super.onPause();
     		locationManager.removeUpdates(this);
+    		super.onPause();
+    		
     	}
     	
     	@Override
     	public void onResume() {
-    		super.onResume();
     		locationManager.requestLocationUpdates(bestCrit, 500, 1, this);
+    		super.onResume();
+    		
     	}
     	
     	public void onActivityCreated(Bundle savedInstanceState) {
@@ -197,8 +243,8 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
     		if(location != null) {
         		GpsLat = (int) (location.getLatitude() * 1E6);
         		GpsLong = (int) (location.getLongitude() * 1E6);
-    			latitude.setText(Integer.toString(GpsLat));
-    			longitude.setText(Integer.toString(GpsLong));
+        		latitude.setText(String.valueOf(location.getLatitude()));
+    			longitude.setText(String.valueOf(location.getLongitude()));
         	}
         	else {
         		Toast.makeText(getActivity(), "Couldn't find Provider", Toast.LENGTH_SHORT).show();
@@ -221,10 +267,8 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 				public void onClick(View v) {
 					// TODO Auto-generated method stub
 					Intent myIntent = new Intent(getActivity(), Mapping.class);
-					String message_lat = Integer.toString(GpsLat);
-					String message_long = Integer.toString(GpsLong);
-					myIntent.putExtra("messageLat", message_lat);
-					myIntent.putExtra("messageLong", message_long);
+					myIntent.putExtra("messageLat", GpsLat);
+					myIntent.putExtra("messageLong", GpsLong);
 					startActivity(myIntent);
 				}
 			});
@@ -238,8 +282,8 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 			// TODO Auto-generated method stub
 			GpsLat = (int) (loc.getLatitude() * 1E6);
 			GpsLong = (int) (loc.getLongitude() * 1E6);
-			latitude.setText(Integer.toString(GpsLat));
-			longitude.setText(Integer.toString(GpsLong));
+			latitude.setText(String.valueOf(loc.getLatitude()));
+			longitude.setText(String.valueOf(loc.getLongitude()));
 		}
 
 

@@ -1,11 +1,13 @@
 package com.example.android_project_cmpe_235;
 
-import com.google.android.maps.MapView;
-
 import android.app.ActionBar;
+import android.app.AlertDialog;
 import android.app.FragmentTransaction;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
@@ -15,18 +17,20 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.NavUtils;
 import android.support.v4.view.ViewPager;
+import android.telephony.SmsManager;
+import android.text.util.Linkify;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.android.maps.MapView;
 
 public class MainActivity extends FragmentActivity implements ActionBar.TabListener {
 
@@ -71,27 +75,17 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 
         actionBar.addTab(
                 actionBar.newTab()
-                        .setText("Home")
-                        .setTabListener(this));
-        actionBar.addTab(
-                actionBar.newTab()
                         .setText("Barcode Scanner")
                         .setTabListener(this));
         actionBar.addTab(
                 actionBar.newTab()
                         .setText("GPS")
                         .setTabListener(this));
+        actionBar.addTab(
+                actionBar.newTab()
+                        .setText("About")
+                        .setTabListener(this));
         
-        // For each of the sections in the app, add a tab to the action bar.
- /*       for (int i = 0; i < mSectionsPagerAdapter.getCount(); i++) {
-            // Create a tab with text corresponding to the page title defined by the adapter.
-            // Also specify this Activity object, which implements the TabListener interface, as the
-            // listener for when this tab is selected.
-            actionBar.addTab(
-                    actionBar.newTab()
-                            .setText(mSectionsPagerAdapter.getPageTitle(i))
-                            .setTabListener(this));
-        }*/
     }
 
     @Override
@@ -129,8 +123,9 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
         @Override
         public Fragment getItem(int i) {
         	switch(i) {
-        	case 1: return new BarCodeFragment();
-        	case 2: return new GpsSectionFragment();
+        	case 0: return new BarCodeFragment();
+        	case 1: return new GpsSectionFragment();
+        	case 2: return new AboutSectionFragment();
         	}
             Fragment fragment = new DummySectionFragment();
             Bundle args = new Bundle();
@@ -154,15 +149,14 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
             return null;
         }
     }
-
-    /**
-     * A dummy fragment representing a section of the app, but that simply displays dummy text.
-     */
     
     public static class BarCodeFragment extends Fragment {
 
+    	SmsManager sms = SmsManager.getDefault();
+    	TextView result_text;
     	EditText PhoneNum;
-    	Button send;
+    	Button send, scan;
+    	Linkify link;
     	
 		@Override
 		public void onActivityCreated(Bundle savedInstanceState) {
@@ -182,8 +176,60 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 			// TODO Auto-generated method stub
 			View mLayout = inflater.inflate(R.layout.activity_barcode, container, false);
 			
+			result_text = (TextView) mLayout.findViewById(R.id.result_text);
 			PhoneNum = (EditText) mLayout.findViewById (R.id.phoneNum);
 			send = (Button) mLayout.findViewById(R.id.send);
+			scan = (Button) mLayout.findViewById(R.id.scan);
+			
+			scan.setOnClickListener(new View.OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					// TODO Auto-generated method stub
+					Toast.makeText(getActivity(), "Scan", Toast.LENGTH_SHORT).show();
+					Intent intentQR = new Intent("com.google.zxing.client.android.SCAN");
+					intentQR.setPackage("com.google.zxing.client.android");
+					intentQR.putExtra("SCAN_MODE", "QR_CODE_MODE");
+					startActivityForResult(intentQR, 0);
+				}
+			});
+			
+			send.setOnClickListener(new View.OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					// TODO Auto-generated method stub
+					AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+					builder.setMessage("Send SMS Message?")
+						.setTitle("Confirm");
+					builder.setPositiveButton("Send", new DialogInterface.OnClickListener() {
+						
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							// TODO Auto-generated method stub
+							sms.sendTextMessage(PhoneNum.getText().toString(), null, result_text.getText().toString(), null, null);
+							PhoneNum.setText("");
+							Toast.makeText(getActivity(), "SMS Sent", Toast.LENGTH_SHORT).show();
+							dialog.dismiss();
+							
+						}
+					});
+					builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+						
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							// TODO Auto-generated method stub
+							PhoneNum.setText("");
+							dialog.cancel();
+							
+						}
+					});
+					AlertDialog dialog = builder.create();
+					dialog.show();
+					
+					
+				}
+			});
 			
 			return mLayout;
 		}
@@ -197,7 +243,20 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 		@Override
 		public void onResume() {
 			// TODO Auto-generated method stub
+			getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 			super.onResume();
+		}
+		
+		public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+			final String results = intent.getStringExtra("SCAN_RESULT");
+			  if (results != null) {
+			    // handle scan result  
+				  result_text.setText(results);
+				  link.addLinks(result_text, Linkify.ALL);
+			  }
+			  else {
+				  return;
+			  }
 		}
     	
     }
@@ -307,6 +366,28 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 			
 		}
     }
+    
+    public static class AboutSectionFragment extends Fragment {
+
+		@Override
+		public void onCreate(Bundle savedInstanceState) {
+			// TODO Auto-generated method stub
+			super.onCreate(savedInstanceState);
+		}
+
+		@Override
+		public View onCreateView(LayoutInflater inflater, ViewGroup container,
+				Bundle savedInstanceState) {
+			// TODO Auto-generated method stub
+			View mLayout = inflater.inflate(R.layout.activity_about, container, false);
+			return mLayout;
+		}
+    	
+    }
+    
+    /**
+     * A dummy fragment representing a section of the app, but that simply displays dummy text.
+     */
     
     public static class DummySectionFragment extends Fragment {
         public DummySectionFragment() {

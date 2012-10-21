@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:layout_marginBottom="10dp"
@@ -14,56 +13,54 @@
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Large Text"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
-
+        android:text="Scanner, using Zxing source code"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textSize="12dp" />
+
     <Button
-        android:id="@+id/button1"
-        android:layout_width="wrap_content"
+        android:id="@+id/scan"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Button" />
+        android:text="Scan" />
 
     <TextView
         android:id="@+id/textView4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Medium Text"
+        android:text="Results:"
         android:textAppearance="?android:attr/textAppearanceMedium" />
-
+
     <TextView
-        android:id="@+id/textView3"
-        android:layout_width="wrap_content"
+        android:id="@+id/result_text"
+        android:layout_width="282dp"
         android:layout_height="wrap_content"
-        android:text="Large Text"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
-
-    <TextView
-        android:id="@+id/textView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Large Text"
+        android:layout_weight="0.32"
+        android:hint="Scan Results"
+        android:autoLink="web"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content" >
-
-    <EditText
-        android:id="@+id/editText1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="phone" >
 
-        <requestFocus />
-    </EditText>
+        <EditText
+            android:id="@+id/phoneNum"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="3.97"
+            android:ems="10"
+            android:hint="enter number"
+            android:inputType="phone" >
 
-    <Button
-        android:id="@+id/button2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Send" />
+            <requestFocus />
+        </EditText>
 
+        <Button
+            android:id="@+id/send"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10px"
+            android:text="Send" />
     </LinearLayout>
-    
+
 </LinearLayout>

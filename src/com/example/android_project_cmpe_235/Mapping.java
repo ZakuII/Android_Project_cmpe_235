@@ -20,6 +20,7 @@ import android.view.MenuItem;
 import android.widget.Toast;
 import android.support.v4.app.NavUtils;
 
+//google maps activity
 public class Mapping extends MapActivity {
 
 	MapView map;
@@ -31,25 +32,33 @@ public class Mapping extends MapActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //set the layout
         setContentView(R.layout.activity_mapping);
         getActionBar().setDisplayHomeAsUpEnabled(true);
         map = (MapView) findViewById(R.id.mview);
+        //set the icon for the map location
         d = Mapping.this.getResources().getDrawable(R.drawable.ic_launcher);
         CustomItemizedOverlay customOverlay = new CustomItemizedOverlay(d, Mapping.this);
         
+        //get data from the previous screen with the GPS location
         Intent myIntent = getIntent();
         int messageLat = myIntent.getIntExtra("messageLat", 0);
         int messageLong = myIntent.getIntExtra("messageLong", 0);
         
+        //create map overlay
         overlaylist = map.getOverlays();
+        //setup compass
         compass = new MyLocationOverlay(Mapping.this, map);
         overlaylist.add(compass);
         controlmap = map.getController();
         
+        //set map point
         GeoPoint point = new GeoPoint(messageLat, messageLong);
+        //add overlay item using CustomItemizedOverlay.java helper class
         OverlayItem overlayitem = new OverlayItem(point, "You are Here", "point");
         customOverlay.insertOverlay(overlayitem);
         overlaylist.add(customOverlay);
+        //set zoom and goto point
         controlmap.animateTo(point);
         controlmap.setZoom(15);
         
@@ -59,6 +68,7 @@ public class Mapping extends MapActivity {
     @Override
 	protected void onPause() {
 		// TODO Auto-generated method stub
+    	//disable compass
     	compass.disableCompass();
 		super.onPause();
 	}
@@ -66,6 +76,7 @@ public class Mapping extends MapActivity {
 	@Override
 	protected void onResume() {
 		// TODO Auto-generated method stub
+		//enable compass
 		compass.enableCompass();
 		super.onResume();
 	}

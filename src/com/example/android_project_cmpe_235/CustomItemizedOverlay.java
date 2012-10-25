@@ -8,6 +8,7 @@ import android.graphics.drawable.Drawable;
 import com.google.android.maps.ItemizedOverlay;
 import com.google.android.maps.OverlayItem;
 
+//helper class for map overlay
 public class CustomItemizedOverlay extends ItemizedOverlay<OverlayItem>{
 
     private final ArrayList<OverlayItem> Overlay = new ArrayList<OverlayItem>();
@@ -15,6 +16,7 @@ public class CustomItemizedOverlay extends ItemizedOverlay<OverlayItem>{
     private Context context;
 
     public CustomItemizedOverlay(Drawable defaultMarker) {
+    	//set center to middle of icon
         super(boundCenterBottom(defaultMarker));
     }
 
@@ -32,7 +34,8 @@ public class CustomItemizedOverlay extends ItemizedOverlay<OverlayItem>{
     public int size() {
         return Overlay.size();
     }
-
+    
+    //add overlay item
     public void insertOverlay(OverlayItem overlay) {
         Overlay.add(overlay);
         this.populate();

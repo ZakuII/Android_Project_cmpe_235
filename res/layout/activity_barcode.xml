@@ -16,12 +16,12 @@
         android:text="Scanner, using Zxing source code"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textSize="12dp" />
-
+
     <Button
         android:id="@+id/scan"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Scan" />
+        android:text="Start Scanner" />
 
     <TextView
         android:id="@+id/textView4"
@@ -29,15 +29,22 @@
         android:layout_height="wrap_content"
         android:text="Results:"
         android:textAppearance="?android:attr/textAppearanceMedium" />
-
+
     <TextView
         android:id="@+id/result_text"
         android:layout_width="282dp"
         android:layout_height="wrap_content"
-        android:layout_weight="0.32"
-        android:hint="Scan Results"
+        android:layout_weight="0.25"
         android:autoLink="web"
+        android:hint="Scan Results"
         android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Send SMS with Result from Above"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
 
     <LinearLayout
         android:layout_width="fill_parent"

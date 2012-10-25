@@ -72,7 +72,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
                 actionBar.setSelectedNavigationItem(position);
             }
         });
-
+        //creates tab for each fragment and the tab labels
         actionBar.addTab(
                 actionBar.newTab()
                         .setText("Barcode Scanner")
@@ -123,6 +123,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
         @Override
         public Fragment getItem(int i) {
         	switch(i) {
+        	//creates the fragments
         	case 0: return new BarCodeFragment();
         	case 1: return new GpsSectionFragment();
         	case 2: return new AboutSectionFragment();
@@ -136,12 +137,14 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 
         @Override
         public int getCount() {
+        	//return number of tabs
             return 3;
         }
 
         @Override
         public CharSequence getPageTitle(int position) {
             switch (position) {
+            //set title of fragments
                 case 0: return getString(R.string.title_section1).toUpperCase();
                 case 1: return getString(R.string.title_section2).toUpperCase();
                 case 2: return getString(R.string.title_section3).toUpperCase();
@@ -150,6 +153,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
         }
     }
     
+    //This contains the barcode fragment which contains the scanner start intent and SMS sending function
     public static class BarCodeFragment extends Fragment {
 
     	SmsManager sms = SmsManager.getDefault();
@@ -174,18 +178,22 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 		public View onCreateView(LayoutInflater inflater, ViewGroup container,
 				Bundle savedInstanceState) {
 			// TODO Auto-generated method stub
+			//obtain the layout of the fragment from the layout folder
 			View mLayout = inflater.inflate(R.layout.activity_barcode, container, false);
 			
+			//Link the xml elements to variables 
 			result_text = (TextView) mLayout.findViewById(R.id.result_text);
 			PhoneNum = (EditText) mLayout.findViewById (R.id.phoneNum);
 			send = (Button) mLayout.findViewById(R.id.send);
 			scan = (Button) mLayout.findViewById(R.id.scan);
 			
+			//setup functionality for the scan button
 			scan.setOnClickListener(new View.OnClickListener() {
 				
 				@Override
 				public void onClick(View v) {
 					// TODO Auto-generated method stub
+					//creates a toast message, and starts another activity which contains the barcode scanner
 					Toast.makeText(getActivity(), "Scan", Toast.LENGTH_SHORT).show();
 					Intent intentQR = new Intent("com.google.zxing.client.android.SCAN");
 					intentQR.setPackage("com.google.zxing.client.android");
@@ -194,19 +202,23 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 				}
 			});
 			
+			//setup functionality for the SMS sending button
 			send.setOnClickListener(new View.OnClickListener() {
 				
 				@Override
 				public void onClick(View v) {
 					// TODO Auto-generated method stub
+					//creates a dialog box to confirm SMS sending
 					AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 					builder.setMessage("Send SMS Message?")
 						.setTitle("Confirm");
+					//on confirm
 					builder.setPositiveButton("Send", new DialogInterface.OnClickListener() {
 						
 						@Override
 						public void onClick(DialogInterface dialog, int which) {
 							// TODO Auto-generated method stub
+							//send SMS message, clear the phone number, and send notice of message being sent
 							sms.sendTextMessage(PhoneNum.getText().toString(), null, result_text.getText().toString(), null, null);
 							PhoneNum.setText("");
 							Toast.makeText(getActivity(), "SMS Sent", Toast.LENGTH_SHORT).show();
@@ -214,23 +226,26 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 							
 						}
 					});
+					//on cancel
 					builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
 						
 						@Override
 						public void onClick(DialogInterface dialog, int which) {
 							// TODO Auto-generated method stub
+							//clears phone number
 							PhoneNum.setText("");
 							dialog.cancel();
 							
 						}
 					});
+					//displays dialog box
 					AlertDialog dialog = builder.create();
 					dialog.show();
 					
 					
 				}
 			});
-			
+			//displays the layout of the fragment
 			return mLayout;
 		}
 
@@ -243,14 +258,18 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 		@Override
 		public void onResume() {
 			// TODO Auto-generated method stub
+			//resets the orientation of the application
 			getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 			super.onResume();
 		}
 		
+		//returns results from the barcode scanner
 		public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+			//get results from the intent
 			final String results = intent.getStringExtra("SCAN_RESULT");
 			  if (results != null) {
 			    // handle scan result  
+				// Set text to the result given, and linkify result if its a URL  
 				  result_text.setText(results);
 				  link.addLinks(result_text, Linkify.ALL);
 			  }
@@ -260,6 +279,8 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 		}
     	
     }
+    //contains GPS location and maps
+    //need to implement LocationListener to automatically get updates from GPS
     public static class GpsSectionFragment extends Fragment implements LocationListener {
     	public GpsSectionFragment() {
     	}
@@ -275,6 +296,8 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
     	@Override
     	public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
+            //setup the location manager used for the GPS
+            //setup the criteria to let the device use the most efficient method of obtaining location
             locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
             Criteria crit = new Criteria();
             bestCrit = locationManager.getBestProvider(crit, false);
@@ -284,6 +307,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
     	
     	@Override
     	public void onPause() {
+    		//stop updating GPS
     		locationManager.removeUpdates(this);
     		super.onPause();
     		
@@ -291,6 +315,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
     	
     	@Override
     	public void onResume() {
+    		//resumes GPS updates
     		locationManager.requestLocationUpdates(bestCrit, 500, 1, this);
     		super.onResume();
     		
@@ -299,13 +324,16 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
     	public void onActivityCreated(Bundle savedInstanceState) {
     		super.onActivityCreated(savedInstanceState);
     		
+    		//starts obtaining GPS location from the location manager using the criteria
     		if(location != null) {
         		GpsLat = (int) (location.getLatitude() * 1E6);
         		GpsLong = (int) (location.getLongitude() * 1E6);
+        		//set text to the GPS coordinates
         		latitude.setText(String.valueOf(location.getLatitude()));
     			longitude.setText(String.valueOf(location.getLongitude()));
         	}
         	else {
+        		//error if we get no reception
         		Toast.makeText(getActivity(), "Couldn't find Provider", Toast.LENGTH_SHORT).show();
         	}
     		
@@ -314,24 +342,29 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
     	public View onCreateView(LayoutInflater inflater, ViewGroup container,
     			Bundle savedInstanceState) {
     		
+    		//obtain layout for fragment
     		View mLayout = inflater.inflate(R.layout.activity_gps, container, false);
     		
+    		//link xml elements to the variables
     		 GetMap = (Button) mLayout.findViewById(R.id.get_map);
              latitude = (TextView) mLayout.findViewById(R.id.latitude);
              longitude = (TextView) mLayout.findViewById(R.id.longitude);
     		
+             //setup google maps button
              GetMap.setOnClickListener(new View.OnClickListener() {
 				
 				@Override
 				public void onClick(View v) {
 					// TODO Auto-generated method stub
+					//starts the google map activity in the Mapping.java file
 					Intent myIntent = new Intent(getActivity(), Mapping.class);
 					myIntent.putExtra("messageLat", GpsLat);
 					myIntent.putExtra("messageLong", GpsLong);
 					startActivity(myIntent);
 				}
 			});
-             
+            
+             //returns layout
     		return mLayout;
     	}
 
@@ -339,8 +372,10 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 		@Override
 		public void onLocationChanged(Location loc) {
 			// TODO Auto-generated method stub
+			//Automatically updates the GPS location
 			GpsLat = (int) (loc.getLatitude() * 1E6);
 			GpsLong = (int) (loc.getLongitude() * 1E6);
+			//updates the text
 			latitude.setText(String.valueOf(loc.getLatitude()));
 			longitude.setText(String.valueOf(loc.getLongitude()));
 		}
@@ -367,6 +402,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 		}
     }
     
+    //contains fragment with identifying information
     public static class AboutSectionFragment extends Fragment {
 
 		@Override
@@ -379,6 +415,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 		public View onCreateView(LayoutInflater inflater, ViewGroup container,
 				Bundle savedInstanceState) {
 			// TODO Auto-generated method stub
+			//get layout
 			View mLayout = inflater.inflate(R.layout.activity_about, container, false);
 			return mLayout;
 		}

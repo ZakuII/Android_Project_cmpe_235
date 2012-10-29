@@ -15,5 +15,6 @@
     <string name="title_activity_mapping">Mapping</string>
     <string name="zxinglib_msg_default_status">Scan</string>
     <string name="title_scanner">scanner</string>
+    <string name="title_activity_camera">Barcode Scanner</string>
 
 </resources>

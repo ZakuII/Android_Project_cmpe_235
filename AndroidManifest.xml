@@ -41,6 +41,11 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.android_project_cmpe_235.MainActivity" />
         </activity>
+        <activity 
+            android:name="net.sourceforge.zbar.android.CameraTest.CameraTestActivity" 
+            android:label="@string/title_activity_camera" >
+
+        </activity>
 
         
     </application>

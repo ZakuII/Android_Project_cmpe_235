@@ -10,44 +10,45 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA" />
-	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-	<uses-feature android:name="android.hardware.camera" />
-	<uses-feature android:name="android.hardware.camera.autofocus" />
-	<uses-permission android:name="android.permission.VIBRATE" />
-	<uses-permission android:name="android.permission.FLASHLIGHT" />
-	<uses-permission android:name="android.permission.SEND_SMS"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <uses-feature android:name="android.hardware.camera" />
+    <uses-feature android:name="android.hardware.camera.autofocus" />
+
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.FLASHLIGHT" />
+    <uses-permission android:name="android.permission.SEND_SMS" />
 
     <application
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/ThemeHolo" >
-        <uses-library android:name="com.google.android.maps" />
-
-        <activity
-            android:name=".MainActivity"
-            android:configChanges = "orientation"
-            android:label="@string/title_activity_main" >
+        <activity android:name=".BarCodeActivity" android:label="@string/title_activity_bar_code">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
+        </activity><uses-library android:name="com.google.android.maps" />
 
-        <activity
-            android:name=".Mapping"
-            android:label="@string/title_activity_mapping" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.android_project_cmpe_235.MainActivity" />
-        </activity>
-        <activity 
-            android:name="net.sourceforge.zbar.android.CameraTest.CameraTestActivity" 
-            android:label="@string/title_activity_camera" >
+        <activity android:name=".Mapping" android:label="@string/title_activity_mapping">
+            <meta-data android:name="android.support.PARENT_ACTIVITY" android:value="com.example.android_project_cmpe_235.MainActivity" />
+        </activity><activity
+            android:name=".MainActivity"
+            android:configChanges="orientation"
+            android:label="@string/title_activity_main" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
+            </intent-filter>
         </activity>
-
         
+        <activity
+            android:name="net.sourceforge.zbar.android.CameraTest.CameraTestActivity"
+            android:label="@string/title_activity_camera" >
+        </activity>
+        
+        <activity android:name="AboutSectionActivity"></activity>
     </application>
 
 </manifest>

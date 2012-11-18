@@ -1,55 +1,40 @@
-/*
- * Basic no frills app which integrates the ZBar barcode scanner with
- * the camera.
- * 
- * Created by lisah0 on 2012-02-24
- */
-package net.sourceforge.zbar.android.CameraTest;
+package com.example.android_project_cmpe_235;
 
-import com.example.android_project_cmpe_235.R;
-
-import net.sourceforge.zbar.android.CameraTest.CameraPreview;
-
-import android.app.Activity;
-import android.content.Intent;
-import android.content.pm.ActivityInfo;
-import android.os.Bundle;
-import android.os.Handler;
-import android.util.Log;
-
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.Window;
-import android.widget.FrameLayout;
-import android.widget.Button;
-
-import android.hardware.Camera;
-import android.hardware.Camera.PreviewCallback;
-import android.hardware.Camera.AutoFocusCallback;
-import android.hardware.Camera.Parameters;
-import android.hardware.Camera.Size;
-
-import android.widget.TextView;
-import android.graphics.ImageFormat;
-
-/* Import ZBar Class files */
-import net.sourceforge.zbar.ImageScanner;
+import net.sourceforge.zbar.Config;
 import net.sourceforge.zbar.Image;
+import net.sourceforge.zbar.ImageScanner;
 import net.sourceforge.zbar.Symbol;
 import net.sourceforge.zbar.SymbolSet;
-import net.sourceforge.zbar.Config;
+import net.sourceforge.zbar.android.CameraTest.CameraPreview;
+import android.app.Activity;
+import android.app.Fragment;
+import android.content.Intent;
+import android.content.pm.ActivityInfo;
+import android.hardware.Camera;
+import android.hardware.Camera.AutoFocusCallback;
+import android.hardware.Camera.PreviewCallback;
+import android.hardware.Camera.Size;
+import android.os.Bundle;
+import android.os.Handler;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.FrameLayout;
+import android.widget.TextView;
 
-public class CameraTestActivity extends Activity
-{
-    private Camera mCamera;
+public class CameraFragment extends Fragment {
+	private Camera mCamera;
     private CameraPreview mPreview;
     private Handler autoFocusHandler;
 
     TextView scanText;
-    Button scanButton, returnButton;
+    Button scanButton;
     String resultText;
-
+    QrResultReturn QrCallback;
+    
     ImageScanner scanner;
+    Image imagePreview;
 
     private boolean barcodeScanned = false;
     private boolean previewing = true;
@@ -58,13 +43,31 @@ public class CameraTestActivity extends Activity
         System.loadLibrary("iconv");
     } 
 
+    @Override
+	public void onAttach(Activity activity) {
+		// TODO Auto-generated method stub
+    	try {
+    		QrCallback = (QrResultReturn) activity;
+    	} catch(ClassCastException e) {
+            throw new ClassCastException(activity.toString()
+                    + " must implement QrResultReturn");
+    	}
+		super.onAttach(activity);
+	}
+
+	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        setContentView(R.layout.activity_camera);
-
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-
+    
+    }
+    
+    @Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+    	View mLayout = inflater.inflate(R.layout.activity_camera, container, false);
+    	getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+    	
         autoFocusHandler = new Handler();
         mCamera = getCameraInstance();
 
@@ -72,15 +75,14 @@ public class CameraTestActivity extends Activity
         scanner = new ImageScanner();
         scanner.setConfig(0, Config.X_DENSITY, 3);
         scanner.setConfig(0, Config.Y_DENSITY, 3);
-
-        mPreview = new CameraPreview(this, mCamera, previewCb, autoFocusCB);
-        FrameLayout preview = (FrameLayout)findViewById(R.id.cameraPreview);
+        
+        mPreview = new CameraPreview(getActivity(), mCamera, previewCb, autoFocusCB);
+        FrameLayout preview = (FrameLayout)mLayout.findViewById(R.id.cameraPreview);
         preview.addView(mPreview);
 
-        scanText = (TextView)findViewById(R.id.scanText);
+        scanText = (TextView)mLayout.findViewById(R.id.scanText);
 
-        scanButton = (Button)findViewById(R.id.ScanButton);
-        //returnButton = (Button) findViewById(R.id.ReturnResult);
+        scanButton = (Button)mLayout.findViewById(R.id.ScanButton);
 
         scanButton.setOnClickListener(new View.OnClickListener() {
         	
@@ -96,24 +98,11 @@ public class CameraTestActivity extends Activity
                 }
             });
         
-   /*     returnButton.setOnClickListener(new View.OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				//create the intent
-				 Intent returnIntent = new Intent();
-				 //enter in results
-				 returnIntent.putExtra("SCAN_RESULT",resultText);
-				 //set the results
-				 setResult(1,returnIntent);
-				 //exit
-				 finish();
-			}
-		});*/
-    }
-    
-    //ensure that the preview has the correct instance of the camera
+		return mLayout;
+	}
+
+	//ensure that the preview has the correct instance of the camera
+    @Override
     public void onResume() {
     	if(mCamera == null) {
         	mCamera = getCameraInstance();
@@ -121,7 +110,7 @@ public class CameraTestActivity extends Activity
     	}
     	super.onResume();
     }
-    
+    @Override
 	public void onPause() {
 		releaseCamera();
         super.onPause();        
@@ -167,11 +156,11 @@ public class CameraTestActivity extends Activity
                     previewing = false;
                     mCamera.setPreviewCallback(null);
                     mCamera.stopPreview();
-                    
                     SymbolSet syms = scanner.getResults();
                     for (Symbol sym : syms) {
                     	resultText = sym.getData();
                         scanText.setText("barcode result " + resultText);
+                        QrCallback.QrResults(resultText);
                         barcodeScanned = true;
                     }
                 }
@@ -184,4 +173,9 @@ public class CameraTestActivity extends Activity
                 autoFocusHandler.postDelayed(doAutoFocus, 1000);
             }
         };
+        
+    public interface QrResultReturn {
+    	public void QrResults(String result);
+    }
 }
+

@@ -1,36 +1,19 @@
 package com.example.android_project_cmpe_235;
 
 import android.app.ActionBar;
-import android.app.AlertDialog;
 import android.app.FragmentTransaction;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.pm.ActivityInfo;
-import android.content.res.Configuration;
-import android.location.Criteria;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.telephony.SmsManager;
-import android.text.util.Linkify;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import com.google.android.maps.MapView;
 
 public class MainActivity extends FragmentActivity implements ActionBar.TabListener {
 
@@ -126,7 +109,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
         	//creates the fragments
         	case 0: return new BarCodeFragment();
         	case 1: return new GpsSectionFragment();
-        	case 2: return new AboutSectionFragment();
+       // 	case 2: return new AboutSectionFragment();
         	}
             Fragment fragment = new DummySectionFragment();
             Bundle args = new Bundle();

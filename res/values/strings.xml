@@ -16,5 +16,9 @@
     <string name="zxinglib_msg_default_status">Scan</string>
     <string name="title_scanner">scanner</string>
     <string name="title_activity_camera">Barcode Scanner</string>
+    <string name="title_activity_bar_code">BarCode</string>
+    <string-array name="action_list">
+        <item >QR</item>
+    </string-array>
 
 </resources>

@@ -57,8 +57,11 @@ public class BarCodeFragment extends Fragment {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				Intent intentQR = new Intent(getActivity(), CameraTestActivity.class);
+				Intent intentImage = new Intent(getActivity(), BarCodeActivity.class);
+				startActivity(intentImage);
+			/*	Intent intentQR = new Intent(getActivity(), CameraTestActivity.class);
 				startActivityForResult(intentQR, 0);
+			*/
 			}
 		});
 		
@@ -132,7 +135,7 @@ public class BarCodeFragment extends Fragment {
 		    // handle scan result  
 			// Set text to the result given, and linkify result if its a URL  
 			  result_text.setText(results);
-			  link.addLinks(result_text, Linkify.ALL);
+			  Linkify.addLinks(result_text, Linkify.ALL);
 		  }
 		  else {
 			  return;

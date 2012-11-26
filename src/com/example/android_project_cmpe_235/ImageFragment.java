@@ -31,6 +31,7 @@ public class ImageFragment extends Fragment {
 		return mLayout;
 	}
 	
+	//Downloads image on different thread
 	public class ImageDownloader extends AsyncTask<ImageView, Integer, Drawable> {
 		ImageView imageView = null;
 		

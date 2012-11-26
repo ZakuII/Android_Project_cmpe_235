@@ -27,13 +27,15 @@ public final class R {
     public static final class drawable {
         public static final int black=0x7f020000;
         public static final int device_access_camera=0x7f020001;
-        public static final int ic_action_search=0x7f020002;
-        public static final int ic_launcher=0x7f020003;
-        public static final int social_share=0x7f020004;
-        public static final int zxinglib_icon=0x7f020005;
+        public static final int google_maps_pin=0x7f020002;
+        public static final int ic_action_search=0x7f020003;
+        public static final int ic_launcher=0x7f020004;
+        public static final int icon=0x7f020005;
+        public static final int social_share=0x7f020006;
+        public static final int zxinglib_icon=0x7f020007;
     }
     public static final class id {
-        public static final int FrameLayout1=0x7f060026;
+        public static final int FrameLayout1=0x7f060027;
         public static final int LayoutFragment=0x7f06001c;
         public static final int LayoutMain=0x7f060014;
         public static final int LayoutMain2=0x7f060018;
@@ -42,23 +44,24 @@ public final class R {
         public static final int QrImage=0x7f060016;
         public static final int QrProgressBar=0x7f060017;
         public static final int ScanButton=0x7f06001f;
-        public static final int VideoController=0x7f060029;
+        public static final int VideoController=0x7f06002a;
         public static final int activity_button=0x7f06001b;
-        public static final int audioStatus=0x7f06002b;
+        public static final int audioStatus=0x7f06002c;
         public static final int cameraPreview=0x7f06001d;
-        public static final int editTextDialog=0x7f060025;
+        public static final int container=0x7f060025;
+        public static final int editTextDialog=0x7f060026;
         public static final int get_map=0x7f060022;
-        public static final int imageView1=0x7f060027;
+        public static final int imageView1=0x7f060028;
         public static final int latitude=0x7f060020;
         public static final int longitude=0x7f060021;
-        public static final int menu_camera=0x7f06002c;
-        public static final int menu_settings=0x7f06002f;
-        public static final int menu_share=0x7f06002e;
-        public static final int menu_sharing=0x7f06002d;
+        public static final int menu_camera=0x7f06002d;
+        public static final int menu_settings=0x7f060030;
+        public static final int menu_share=0x7f06002f;
+        public static final int menu_sharing=0x7f06002e;
         public static final int mview=0x7f060024;
         public static final int pager=0x7f060023;
         public static final int phoneNum=0x7f060011;
-        public static final int progressBar1=0x7f060028;
+        public static final int progressBar1=0x7f060029;
         public static final int result_text=0x7f060010;
         public static final int scan=0x7f06000f;
         public static final int scanText=0x7f06001e;
@@ -74,7 +77,7 @@ public final class R {
         public static final int textView8=0x7f06000d;
         public static final int textView9=0x7f06000e;
         public static final int text_result1=0x7f06001a;
-        public static final int videoView=0x7f06002a;
+        public static final int videoView=0x7f06002b;
         /**  Messages IDs 
          */
         public static final int zxinglib_auto_focus=0x7f060000;
@@ -92,16 +95,19 @@ public final class R {
         public static final int activity_gps=0x7f030004;
         public static final int activity_main=0x7f030005;
         public static final int activity_mapping=0x7f030006;
-        public static final int dialog_share=0x7f030007;
-        public static final int fragment_image=0x7f030008;
-        public static final int fragment_info_bar=0x7f030009;
-        public static final int fragment_media=0x7f03000a;
+        public static final int activity_start=0x7f030007;
+        public static final int dialog_share=0x7f030008;
+        public static final int fragment_barcode=0x7f030009;
+        public static final int fragment_image=0x7f03000a;
+        public static final int fragment_info_bar=0x7f03000b;
+        public static final int fragment_media=0x7f03000c;
     }
     public static final class menu {
         public static final int activity_barcode2=0x7f0a0000;
         public static final int activity_main=0x7f0a0001;
         public static final int activity_mapping=0x7f0a0002;
-        public static final int base_activity=0x7f0a0003;
+        public static final int activity_start=0x7f0a0003;
+        public static final int base_activity=0x7f0a0004;
     }
     public static final class raw {
         public static final int zxinglib_beep=0x7f040000;
@@ -119,6 +125,7 @@ public final class R {
         public static final int title_activity_camera=0x7f07000f;
         public static final int title_activity_main=0x7f070006;
         public static final int title_activity_mapping=0x7f07000c;
+        public static final int title_activity_start=0x7f070011;
         public static final int title_scanner=0x7f07000e;
         public static final int title_section1=0x7f070003;
         public static final int title_section2=0x7f070002;

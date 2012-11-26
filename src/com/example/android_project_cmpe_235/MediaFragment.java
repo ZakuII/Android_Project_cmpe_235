@@ -26,29 +26,17 @@ public class MediaFragment extends Fragment {
 		mediaType = bundle.getInt("MediaType");
 		View mLayout = inflater.inflate(R.layout.fragment_media, container, false);
 		videoView = (VideoView) mLayout.findViewById(R.id.videoView);
+		//create buttons for playback
 		mediaCon = new MediaController(getActivity());
 		
+		//set buttons to be on the main activity view
 		mediaCon.setAnchorView(videoView);
-		Log.d("debug", "setting media controller");
 		videoView.setMediaController(mediaCon);
-		Log.d("debug", "setting video URI");
+		//fetch the media content from the internet
 		videoView.setVideoURI(media);
-		Log.d("debug", "starting player");
 		videoView.start();
 		
 		return mLayout;
-	}
-
-	@Override
-	public void onPause() {
-		// TODO Auto-generated method stub
-		super.onPause();
-	}
-
-	@Override
-	public void onResume() {
-		// TODO Auto-generated method stub
-		super.onResume();
 	}
 
 }

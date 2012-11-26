@@ -34,7 +34,7 @@ public class Mapping extends MapActivity {
         getActionBar().setDisplayHomeAsUpEnabled(true);
         map = (MapView) findViewById(R.id.mview);
         //set the icon for the map location
-        d = Mapping.this.getResources().getDrawable(R.drawable.ic_launcher);
+        d = Mapping.this.getResources().getDrawable(R.drawable.google_maps_pin);
         CustomItemizedOverlay customOverlay = new CustomItemizedOverlay(d, Mapping.this);
         
         //get data from the previous screen with the GPS location

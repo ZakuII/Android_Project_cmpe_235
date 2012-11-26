@@ -17,8 +17,11 @@
     <string name="title_scanner">scanner</string>
     <string name="title_activity_camera">Barcode Scanner</string>
     <string name="title_activity_bar_code">BarCode</string>
+
     <string-array name="action_list">
-        <item >QR</item>
+        <item>QR</item>
     </string-array>
+
+    <string name="title_activity_start">Ad Touch</string>
 
 </resources>

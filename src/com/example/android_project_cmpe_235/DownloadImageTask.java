@@ -10,11 +10,10 @@ import android.util.Log;
 
 public class DownloadImageTask {
 	
+	//download image from internet
 	public Drawable downloadImage(String url) {
 		try {
-			Log.d("debug", "Getting image from web");
 			InputStream is = (InputStream) this.fetch(url);
-			Log.d("debug", "Creating drawable");
 			Drawable d = Drawable.createFromStream(is, "src");
 			return d;
 		} catch (MalformedURLException e) {
@@ -26,17 +25,14 @@ public class DownloadImageTask {
 		}
 	}
 	
+	//parse the url string and get it contents
 	public Object fetch(String address) throws MalformedURLException,IOException {
-		Log.d("debug", "URL get");
 		URL url = new URL(address);
-		Log.d("debug", "Loading URL");
 		try {
 			Object content = url.getContent();
-			Log.d("debug", "URL return");
 			return content;
 		} catch (IOException e) {
 			e.printStackTrace();
-			Log.d("debug", "failed getContent");
 		}
 		
 		return null;

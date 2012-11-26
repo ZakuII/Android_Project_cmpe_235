@@ -41,6 +41,9 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
         // Set up the action bar.
         final ActionBar actionBar = getActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+        actionBar.setDisplayHomeAsUpEnabled(false);
+        actionBar.setDisplayShowTitleEnabled(false);
+        actionBar.setDisplayShowHomeEnabled(false);
 
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.pager);
@@ -109,7 +112,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
         	//creates the fragments
         	case 0: return new BarCodeFragment();
         	case 1: return new GpsSectionFragment();
-       // 	case 2: return new AboutSectionFragment();
+        	case 2: return new AboutSectionFragment();
         	}
             Fragment fragment = new DummySectionFragment();
             Bundle args = new Bundle();

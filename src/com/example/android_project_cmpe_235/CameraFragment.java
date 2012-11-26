@@ -47,6 +47,7 @@ public class CameraFragment extends Fragment {
 	public void onAttach(Activity activity) {
 		// TODO Auto-generated method stub
     	try {
+    		//setup interface to talk to main activity
     		QrCallback = (QrResultReturn) activity;
     	} catch(ClassCastException e) {
             throw new ClassCastException(activity.toString()
@@ -173,7 +174,7 @@ public class CameraFragment extends Fragment {
                 autoFocusHandler.postDelayed(doAutoFocus, 1000);
             }
         };
-        
+    //create empty method for interface    
     public interface QrResultReturn {
     	public void QrResults(String result);
     }

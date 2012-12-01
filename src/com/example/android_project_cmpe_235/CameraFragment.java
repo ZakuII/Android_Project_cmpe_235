@@ -6,6 +6,7 @@ import net.sourceforge.zbar.ImageScanner;
 import net.sourceforge.zbar.Symbol;
 import net.sourceforge.zbar.SymbolSet;
 import net.sourceforge.zbar.android.CameraTest.CameraPreview;
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Intent;
@@ -66,6 +67,11 @@ public class CameraFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
+    	final ActionBar actionBar = getActivity().getActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setDisplayShowTitleEnabled(true);
+        actionBar.setDisplayShowHomeEnabled(true);
+		actionBar.setTitle("QR Scanner");
     	View mLayout = inflater.inflate(R.layout.activity_camera, container, false);
     	getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
     	
@@ -81,11 +87,12 @@ public class CameraFragment extends Fragment {
         FrameLayout preview = (FrameLayout)mLayout.findViewById(R.id.cameraPreview);
         preview.addView(mPreview);
 
-        scanText = (TextView)mLayout.findViewById(R.id.scanText);
+        scanText = (TextView)mLayout.findViewById(R.id.cameraText);
+        scanText.setText("Place QR Code within View");
 
-        scanButton = (Button)mLayout.findViewById(R.id.ScanButton);
+//        scanButton = (Button)mLayout.findViewById(R.id.ScanButton);
 
-        scanButton.setOnClickListener(new View.OnClickListener() {
+/*        scanButton.setOnClickListener(new View.OnClickListener() {
         	
                 public void onClick(View v) {
                     if (barcodeScanned) {
@@ -97,7 +104,7 @@ public class CameraFragment extends Fragment {
                         mCamera.autoFocus(autoFocusCB);
                     }
                 }
-            });
+            });*/
         
 		return mLayout;
 	}
@@ -160,7 +167,7 @@ public class CameraFragment extends Fragment {
                     SymbolSet syms = scanner.getResults();
                     for (Symbol sym : syms) {
                     	resultText = sym.getData();
-                        scanText.setText("barcode result " + resultText);
+                        scanText.setText("Result: " + resultText);
                         QrCallback.QrResults(resultText);
                         barcodeScanned = true;
                     }

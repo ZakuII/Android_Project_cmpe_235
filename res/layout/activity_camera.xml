@@ -1,36 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-  xmlns:android="http://schemas.android.com/apk/res/android"
-  android:orientation="vertical"
-  android:layout_width="match_parent"
-  android:layout_height="match_parent">
-
-  <FrameLayout
-    android:id="@+id/cameraPreview"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/LinearLayout1"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_weight="1"
-  />
+    android:orientation="vertical" >
 
-  <TextView
-    android:id="@+id/scanText"
-    android:text="Scanning..."
-    android:layout_height="wrap_content" 
-    android:layout_width="match_parent">
-  </TextView>
-
-  <LinearLayout
-    android:layout_width="fill_parent"
-    android:layout_height="wrap_content" >
-
-	  <Button
-	      android:id="@+id/ScanButton"
-	      android:layout_width="wrap_content"
-	      android:layout_height="wrap_content"
-	      android:layout_gravity="center"
-	      android:layout_weight="1"
-	      android:text="Rescan" />
-	  
-  </LinearLayout>
-
+    <FrameLayout
+        android:id="@+id/cameraPreview"
+        android:layout_weight="1"
+        android:layout_width="match_parent"
+        android:layout_height="0dp" >
+    </FrameLayout>
+    
+   <TextView
+       android:id="@+id/cameraText"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:layout_gravity="bottom|center"
+       android:text="Place QR Code within View"
+       android:textAppearance="?android:attr/textAppearanceSmall" />
 </LinearLayout>

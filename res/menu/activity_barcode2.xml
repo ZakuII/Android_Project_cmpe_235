@@ -3,17 +3,21 @@
         <item android:id="@+id/menu_camera" 
           android:icon="@drawable/device_access_camera" 
           android:title="Capture"
-          android:showAsAction="ifRoom" />
+          android:showAsAction="always" android:orderInCategory="1"/>
             
+        <item android:id="@+id/menu_login" 
+            android:title="Log In" 
+            android:icon="@drawable/device_access_camera"
+            android:visible="true" 
+            android:showAsAction="always" android:orderInCategory="2" android:enabled="true"/>
+        
         <item android:id="@+id/menu_sharing"
           android:icon="@drawable/social_share"
           android:title="share"
-          android:showAsAction="ifRoom"
-          android:actionProviderClass="android.widget.ShareActionProvider" />
+          android:showAsAction="never"
+          android:actionProviderClass="android.widget.ShareActionProvider" android:orderInCategory="3"/>
         
-        <item android:id="@+id/menu_share"
-          android:icon="@drawable/social_share"
-          android:title="Share"
-          android:showAsAction="never" />
+        
+        
         
 </menu>

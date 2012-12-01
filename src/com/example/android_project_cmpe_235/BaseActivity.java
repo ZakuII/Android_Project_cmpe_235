@@ -1,17 +1,15 @@
 package com.example.android_project_cmpe_235;
 
 import android.app.ActionBar;
-import android.app.Activity;
-import android.app.Fragment;
-import android.app.FragmentTransaction;
 import android.content.Intent;
+import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.widget.ArrayAdapter;
 import android.widget.ShareActionProvider;
 import android.widget.SpinnerAdapter;
 
-public class BaseActivity extends Activity implements ActionBar.OnNavigationListener {
+public class BaseActivity extends FragmentActivity implements ActionBar.OnNavigationListener {
 	ShareActionProvider mShareActionProvider;
 
 	@Override

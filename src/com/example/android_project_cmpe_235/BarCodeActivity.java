@@ -5,83 +5,37 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
-import android.net.Uri;
-import android.os.AsyncTask;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
+import android.text.format.Time;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.ShareActionProvider;
-import android.widget.SpinnerAdapter;
-import android.widget.TextView;
 
 public class BarCodeActivity extends BaseActivity implements CameraFragment.QrResultReturn {
 
-	Button button;
-	TextView textView;
-	ImageView QrImage;
-	ProgressBar QrProgress;
-	String QrURL, ResultText = null;
-	Boolean ResultIsUrl = false;
-	int IsMedia, currentFragment;
 	ShareActionProvider mShareActionProvider;
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_barcode2);
-        textView = (TextView) findViewById(R.id.text_result1);
-        button = (Button) findViewById(R.id.activity_button);
-        QrImage = (ImageView) findViewById(R.id.QrImage);
-        QrProgress = (ProgressBar) findViewById(R.id.QrProgressBar);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+          FragmentManager fm = getFragmentManager();
+          FragmentTransaction ft = fm.beginTransaction();
         
-        FragmentManager fm = getFragmentManager();
-        FragmentTransaction ft = fm.beginTransaction();
-        
-        ft.add(R.id.LayoutFragment, new CameraFragment());
-        ft.commit();
-        
-        button.setOnClickListener(new View.OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				Bundle bundle = new Bundle();
-				bundle.putString("Result", ResultText);
-				bundle.putInt("MediaType", IsMedia);
-				switch(IsMedia){
-				case 1:
-					SwitchFragment(new MediaFragment(), bundle);
-					break;
-				case 2:
-					SwitchFragment(new MediaFragment(), bundle);
-					break;
-				case 3:
-					SwitchFragment(new ImageFragment(), bundle);
-					break;
-				case 4:
-					startActivity(new Intent(Intent.ACTION_VIEW).setData(Uri.parse(ResultText)));
-					break;
-				}
-			}
-		});
+          ft.add(R.id.LayoutFragment, new HomeFragment());
+          ft.commit();
     }
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// TODO Auto-generated method stub
         getMenuInflater().inflate(R.menu.base_activity, menu);
-        ActionBar actionBar = getActionBar();
-        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
-        actionBar.setDisplayShowTitleEnabled(false);
-        SpinnerAdapter mSpinnerAdapter = ArrayAdapter.createFromResource(this, R.array.action_list, android.R.layout.simple_spinner_dropdown_item);
-        actionBar.setListNavigationCallbacks(mSpinnerAdapter, this);
+        final ActionBar actionBar = getActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
         mShareActionProvider = (ShareActionProvider) menu.findItem(R.id.menu_sharing).getActionProvider();
         return true;
 	}
@@ -90,69 +44,45 @@ public class BarCodeActivity extends BaseActivity implements CameraFragment.QrRe
 	public boolean onOptionsItemSelected(MenuItem item) {
 		// TODO Auto-generated method stub
 		switch(item.getItemId()) {
-/*		case R.id.menu_share:
-			if(ResultIsUrl) {
-				DialogFragment dialog = new ShareDialog(ResultText);
-				dialog.show(getFragmentManager(), "dialog");
-			}
-			else {
-				Toast.makeText(this, "Need a Valid Link to Share", Toast.LENGTH_SHORT).show();
-			}
+		case android.R.id.home:
+			SwitchFragment(new HomeFragment(), null);
 			return true;
-*/
 			
 		case R.id.menu_camera:
 			Log.d("debug", "camera button");
 			SwitchFragment(new CameraFragment(), null);
 			return true;
 			
+		case R.id.menu_maps:
+			return true;
+			
+		case R.id.menu_login:
+			SwitchFragment(new LogInFragment(), null);
+			return true;
+			
 		default:
 			return super.onOptionsItemSelected(item);
-		}
-	}
-
-	@Override
-	public boolean onNavigationItemSelected(int itemPosition, long itemId) {
-		// TODO Auto-generated method stub
-		ActionBar actionBar = getActionBar();
-		Log.d("debug", "Index is " + actionBar.getSelectedNavigationIndex());
-		switch (itemPosition) {
-		case 0:
-			Log.d("debug", "Start 0");
-			if(actionBar.getSelectedNavigationIndex() == 0) {
-			return true;
-			}
-			else {
-				return false;
-			}
-		case 2:
-			Log.d("debug", "Start 2");
-			if(actionBar.getSelectedNavigationIndex() == 2) {
-				FragmentTransaction ft = getFragmentManager().beginTransaction();
-				//ft.replace(R.id.LayoutFragment, new AboutSectionFragment());
-				ft.commit();
-            return true;
-			}
-			else {
-				return false;
-			}
-		default: 
-			return false;
 		}
 	}
 	
 	@Override
 	public void QrResults(String result) {
 		// TODO Auto-generated method stub
-		//uses google api to generate qr code
-		QrURL = "http://chart.googleapis.com/chart?chs=100x100&cht=qr&chl=" + result;
-		QrImage.setTag(QrURL);
-		//retrive the QR generated by google api
-		new ImageDownloader().execute(QrImage);
-		textView.setText(result);
-		ResultText = result;
-		setShareString(ResultText);
-		if(result.contains("http://")) { //if link
+		//get timestamp
+		Time currentTime = new Time(Time.getCurrentTimezone());
+		currentTime.setToNow();
+		String timeNow = currentTime.format("%m/%d/%y %I:%M %p");
+
+		Bundle bundle = new Bundle();
+		//send qr result
+		bundle.putString("result", result);
+		//send timestamp
+		bundle.putString("currentTime", timeNow);
+		//send result to sms manager
+		setShareString(result);
+		//switch to product information screen
+		SwitchFragment(new InfoFragment(), bundle);
+/*		if(result.contains("http://")) { //if link
 			ResultIsUrl = true;
 			if(result.contains(".mp3")) { //if audio
 				IsMedia = 1;
@@ -178,37 +108,10 @@ public class BarCodeActivity extends BaseActivity implements CameraFragment.QrRe
 			ResultIsUrl = false;
 			IsMedia = 0;
 			button.setText("Waiting for Link...");
-		}
+		}*/
 			
 	}
 	
-	//downloads image using asynctask
-	public class ImageDownloader extends AsyncTask<ImageView, Integer, Drawable> {
-		ImageView imageView = null;
-
-		@Override
-		protected void onPreExecute() {
-			// TODO Auto-generated method stub
-			QrProgress.setVisibility(View.VISIBLE);
-			super.onPreExecute();
-		}
-
-		@Override
-		protected Drawable doInBackground(ImageView... imageViews) {
-			// TODO Auto-generated method stub
-			this.imageView = imageViews[0];
-			return new DownloadImageTask().downloadImage((String)imageView.getTag());
-		}
-		
-		@Override
-		protected void onPostExecute(Drawable result) {
-			// TODO Auto-generated method stub
-			QrProgress.setVisibility(View.INVISIBLE);
-			imageView.setImageDrawable(result);
-			super.onPostExecute(result);
-		}
-		
-	}
 	
 	public void SwitchFragment(Fragment newFrag, Bundle bundle) {
 		newFrag.setArguments(bundle);

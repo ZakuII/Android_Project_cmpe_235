@@ -1,5 +1,7 @@
 package com.example.android_project_cmpe_235;
 
+import java.util.List;
+
 import android.app.ActionBar;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
@@ -21,6 +23,7 @@ import android.widget.Toast;
 public class HomeFragment extends Fragment {
 
 	GridView gridView;
+	List<ProductAd> productAds;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -31,6 +34,11 @@ public class HomeFragment extends Fragment {
         actionBar.setDisplayShowTitleEnabled(false);
         actionBar.setDisplayShowHomeEnabled(false);
 		View mLayout = inflater.inflate(R.layout.fragment_home, container, false);
+		
+		ScanHistory scanHistory = new ScanHistory(getActivity());
+		scanHistory.open();
+		productAds = scanHistory.getHistory();
+		scanHistory.close();
 		
 		Button button = (Button) mLayout.findViewById(R.id.buttonstart);
 		gridView = (GridView) mLayout.findViewById(R.id.gridview);
@@ -51,6 +59,18 @@ public class HomeFragment extends Fragment {
 		
 	    gridView.setOnItemClickListener(new OnItemClickListener() {
 	        public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
+	        	ProductAd productAd = productAds.get(position);
+	    		Bundle bundle = new Bundle();
+	    		String result = productAd.getProductIcon();
+	    		//send qr result
+	    		bundle.putString("result", productAd.getProductIcon());
+	    		//send timestamp
+	    		bundle.putString("currentTime", productAd.getReadableDate());
+	    		bundle.putLong("unixTime", productAd.getUnixTime());
+	    		//send result to sms manager
+	    		//setShareString(result);
+	    		//switch to product information screen
+	    		//SwitchFragment(new InfoFragment(), bundle);
 	            Toast.makeText(getActivity(), "" + position, Toast.LENGTH_SHORT).show();
 	        }
 	    });
@@ -68,7 +88,7 @@ public class HomeFragment extends Fragment {
 		@Override
 		public int getCount() {
 			// TODO Auto-generated method stub
-			return 10;
+			return productAds.size();
 		}
 
 		@Override
@@ -86,12 +106,14 @@ public class HomeFragment extends Fragment {
 			{
 				v = convertView;
 			}
+			ProductAd productAd = productAds.get(position);
 			progressBar = (ProgressBar)v.findViewById(R.id.icon_progress);
 			iv = (ImageView)v.findViewById(R.id.icon_image);
 	        String QrURL = "http://testing.gobanana.co.uk/wp-content/uploads/2011/03/CrashTestDummy-2-8544b.jpg";
-	        new DownloadImageTask().downloadedImageToView(getActivity(), iv, QrURL, progressBar);
+	        new DownloadImageTask().downloadedImageToView(getActivity(), iv, productAd.getProductIcon(), progressBar);
 			tv = (TextView)v.findViewById(R.id.icon_text);
-			tv.setText("Profile "+ String.valueOf(position));
+			tv.setText(productAd.getProductName());
+			
 			
 			//iv.setImageResource(R.drawable.icon);
 			return v;

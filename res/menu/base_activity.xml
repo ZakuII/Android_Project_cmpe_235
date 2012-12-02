@@ -24,6 +24,7 @@
           android:title="share"
           android:showAsAction="always"
           android:actionProviderClass="android.widget.ShareActionProvider" android:visible="true" android:orderInCategory="5"/><item android:id="@+id/menu_audio" android:title="Listen to Ad Audio" android:showAsAction="never" android:icon="@drawable/ic_action_headset" android:orderInCategory="4"></item><item android:id="@+id/menu_login" android:title="Log In" android:showAsAction="never" android:icon="@drawable/ic_action_accounts"></item>
+          <item android:id="@+id/menu_history" android:title="Delete History" android:showAsAction="never"></item>
         
         
 </menu>

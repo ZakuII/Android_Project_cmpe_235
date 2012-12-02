@@ -1,17 +1,17 @@
 package com.example.android_project_cmpe_235;
 
+import android.app.ActionBar;
 import android.app.Fragment;
+import android.content.pm.ActivityInfo;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.MediaController;
 import android.widget.VideoView;
 
-public class MediaFragment extends Fragment {
-
+public class VideoFragment extends Fragment {
 	VideoView videoView;
 	MediaController mediaCon;
 	Uri media;
@@ -21,6 +21,11 @@ public class MediaFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
+		final ActionBar actionBar = getActivity().getActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setDisplayShowTitleEnabled(true);
+        actionBar.setDisplayShowHomeEnabled(true);
+        actionBar.setTitle("Video Player");
 		Bundle bundle = this.getArguments();
 		media = Uri.parse(bundle.getString("Result"));
 		mediaType = bundle.getInt("MediaType");
@@ -38,5 +43,5 @@ public class MediaFragment extends Fragment {
 		
 		return mLayout;
 	}
-
+	
 }

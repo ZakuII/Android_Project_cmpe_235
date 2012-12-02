@@ -2,7 +2,10 @@ package com.example.android_project_cmpe_235;
 
 import java.util.List;
 
+import com.example.android_project_cmpe_235.CameraFragment.QrResultReturn;
+
 import android.app.ActionBar;
+import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Context;
@@ -24,7 +27,25 @@ public class HomeFragment extends Fragment {
 
 	GridView gridView;
 	List<ProductAd> productAds;
-	
+	ShareStringReturn shareStringReturn;
+    @Override
+	public void onAttach(Activity activity) {
+		// TODO Auto-generated method stub
+    	try {
+    		//setup interface to talk to main activity
+    		shareStringReturn = (ShareStringReturn) activity;
+    	} catch(ClassCastException e) {
+            throw new ClassCastException(activity.toString()
+                    + " must implement HomeFragment Sharing");
+    	}
+		super.onAttach(activity);
+	}
+    
+    //create empty method for interface    
+    public interface ShareStringReturn {
+    	public void ShareReturn(String result);
+    }
+    
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -63,15 +84,22 @@ public class HomeFragment extends Fragment {
 	    		Bundle bundle = new Bundle();
 	    		String result = productAd.getProductIcon();
 	    		//send qr result
-	    		bundle.putString("result", productAd.getProductIcon());
+	    		bundle.putString("result", result);
 	    		//send timestamp
 	    		bundle.putString("currentTime", productAd.getReadableDate());
 	    		bundle.putLong("unixTime", productAd.getUnixTime());
 	    		//send result to sms manager
+	    		shareStringReturn.ShareReturn(result);
 	    		//setShareString(result);
 	    		//switch to product information screen
-	    		//SwitchFragment(new InfoFragment(), bundle);
-	            Toast.makeText(getActivity(), "" + position, Toast.LENGTH_SHORT).show();
+	    		InfoFragment infoFragment = new InfoFragment();
+	    		infoFragment.setArguments(bundle);
+	    		FragmentTransaction transaction = getFragmentManager().beginTransaction();
+	    		transaction.replace(R.id.LayoutFragment, infoFragment);
+	    		transaction.addToBackStack(null);
+	    		transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+	    		transaction.commit();
+	            //Toast.makeText(getActivity(), "" + position, Toast.LENGTH_SHORT).show();
 	        }
 	    });
 		

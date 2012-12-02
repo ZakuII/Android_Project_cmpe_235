@@ -62,7 +62,7 @@ public class InfoFragment extends Fragment {
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				FragmentTransaction transaction = getFragmentManager().beginTransaction();
-				transaction.replace(R.id.LayoutFragment, new LogInFragment());
+				transaction.replace(R.id.LayoutFragment, new HomeFragment());
 				transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
 				transaction.commit();
 			}

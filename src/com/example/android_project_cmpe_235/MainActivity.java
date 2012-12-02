@@ -17,7 +17,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ShareActionProvider;
 
-public class MainActivity extends BaseActivity implements CameraFragment.QrResultReturn {
+public class MainActivity extends BaseActivity implements CameraFragment.QrResultReturn, HomeFragment.ShareStringReturn {
 
 	ShareActionProvider mShareActionProvider;
 	
@@ -176,6 +176,12 @@ public class MainActivity extends BaseActivity implements CameraFragment.QrResul
 	        // Create the AlertDialog object and return it
 	        return builder.create();
 	    }
+	}
+
+	@Override
+	public void ShareReturn(String result) {
+		// TODO Auto-generated method stub
+		setShareString(result);
 	}
 
 }

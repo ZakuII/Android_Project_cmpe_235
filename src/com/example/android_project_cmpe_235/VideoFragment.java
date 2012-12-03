@@ -2,12 +2,12 @@ package com.example.android_project_cmpe_235;
 
 import android.app.ActionBar;
 import android.app.Fragment;
-import android.content.pm.ActivityInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.MediaController;
 import android.widget.VideoView;
 
@@ -28,9 +28,13 @@ public class VideoFragment extends Fragment {
         actionBar.setTitle("Video Player");
 		Bundle bundle = this.getArguments();
 		media = Uri.parse(bundle.getString("Result"));
+		String resultImage = bundle.getString("ResultImage");
 		mediaType = bundle.getInt("MediaType");
 		View mLayout = inflater.inflate(R.layout.fragment_video, container, false);
 		videoView = (VideoView) mLayout.findViewById(R.id.videoView1);
+		ImageView videoImage = (ImageView) mLayout.findViewById(R.id.videoImage);
+		//get Ad Image
+		new DownloadImageTask().downloadedImageToView(getActivity(), videoImage, resultImage, null);
 		//create buttons for playback
 		mediaCon = new MediaController(getActivity());
 		

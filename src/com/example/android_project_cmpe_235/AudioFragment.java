@@ -3,17 +3,20 @@ package com.example.android_project_cmpe_235;
 import android.app.ActionBar;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.MediaController;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.VideoView;
 
-public class InfoFragment extends Fragment {
+public class AudioFragment extends Fragment {
 
 	Button button;
 	String ResultText = null;
@@ -29,28 +32,39 @@ public class InfoFragment extends Fragment {
         actionBar.setDisplayShowTitleEnabled(true);
         actionBar.setDisplayShowHomeEnabled(true);
 		actionBar.setTitle("Product Information");
-		View mLayout = inflater.inflate(R.layout.fragment_info, container, false);
+		View mLayout = inflater.inflate(R.layout.fragment_audio, container, false);
 		Bundle bundle = this.getArguments();
 		ResultText = bundle.getString("result");
 		String timeNow = bundle.getString("currentTime");
-
-		TextView adId = (TextView) mLayout.findViewById(R.id.ad_id);
-		TextView currentTime = (TextView) mLayout.findViewById(R.id.time_scanned);
-        button = (Button) mLayout.findViewById(R.id.activity_button);
-        Button cancel = (Button) mLayout.findViewById(R.id.cancel_info);
-        ImageView QrImage = (ImageView) mLayout.findViewById(R.id.QrImage);
-        ImageView AdImage = (ImageView) mLayout.findViewById(R.id.adImage);
-        ProgressBar QrProgress = (ProgressBar) mLayout.findViewById(R.id.QrProgressBar);
-        ProgressBar QrProgress2 = (ProgressBar) mLayout.findViewById(R.id.QrProgressBar2);
+		Uri media = Uri.parse(bundle.getString("AudioLink"));
+		
+		TextView adId = (TextView) mLayout.findViewById(R.id.ad_id1);
+		TextView currentTime = (TextView) mLayout.findViewById(R.id.time_scanned1);
+        button = (Button) mLayout.findViewById(R.id.activity_button1);
+        Button cancel = (Button) mLayout.findViewById(R.id.cancel_info1);
+        ImageView QrImage = (ImageView) mLayout.findViewById(R.id.QrImage1);
+        ImageView AdImage = (ImageView) mLayout.findViewById(R.id.adImage1);
+        ProgressBar QrProgress3 = (ProgressBar) mLayout.findViewById(R.id.QrProgressBar3);
+        ProgressBar QrProgress4 = (ProgressBar) mLayout.findViewById(R.id.QrProgressBar4);
+        VideoView audioView = (VideoView) mLayout.findViewById(R.id.audioView);
         
         adId.setText("Ad Id: " + ResultText);
         currentTime.setText("Time: " + timeNow);
 
         String QrURL = "http://chart.googleapis.com/chart?chs=100x100&cht=qr&chl=" + ResultText;
 	    
-        new DownloadImageTask().downloadedImageToView(getActivity(), QrImage, QrURL, QrProgress);
-        new DownloadImageTask().downloadedImageToView(getActivity(), AdImage, ResultText, QrProgress2);
+        new DownloadImageTask().downloadedImageToView(getActivity(), QrImage, QrURL, QrProgress3);
+        new DownloadImageTask().downloadedImageToView(getActivity(), AdImage, ResultText, QrProgress4);
         
+		MediaController mediaCon = new MediaController(getActivity());
+		
+		//set buttons to be on the main activity view
+		mediaCon.setAnchorView(QrImage);
+		audioView.setMediaController(mediaCon);
+		//fetch the media content from the internet
+		audioView.setVideoURI(media);
+		audioView.start();
+		
         AdImage.setOnClickListener(new View.OnClickListener() {
 			
 			@Override

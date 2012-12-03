@@ -11,7 +11,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
-import android.provider.SyncStateContract.Constants;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -26,37 +25,32 @@ public class DownloadImageTask {
 		mContext = context;
 		urlString = url;
 		Bitmap bitMap;
-		try {
-			hashString = Base64.encodeObject(urlString);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return;
-		}
-		if(new File(mContext.getCacheDir(), hashString).exists()) {
-			Log.d("DEBUG", "Image exist");
-			bitMap = BitmapFactory.decodeFile(new File(context.getCacheDir(), hashString).getPath());
-			imageView.setImageBitmap(bitMap);
-		}
-		else {
-			progressStatus = progressBar;
-			new ImageDownloader().execute(imageView);
+		
+		//if image http link
+		if(urlString.contains("http://") && (urlString.contains(".jpg") || urlString.contains(".png"))) {
+			try {
+				//hash image link to be saved as filename
+				hashString = Base64.encodeObject(urlString);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return;
+			}
+			if(new File(mContext.getCacheDir(), hashString).exists()) {
+				Log.d("DEBUG", "Image exist");
+				bitMap = BitmapFactory.decodeFile(new File(context.getCacheDir(), hashString).getPath());
+				imageView.setImageBitmap(bitMap);
+			}
+			else {
+				progressStatus = progressBar;
+				new ImageDownloader().execute(imageView);
+			}
 		}
 	}
 	
 	//download image from internet
 	public Bitmap downloadImage(String url) {
-		/*try {
-			InputStream is = (InputStream) this.fetch(url);
-			Drawable d = Drawable.createFromStream(is, "src");
-			return d;
-		} catch (MalformedURLException e) {
-			e.printStackTrace();
-			return null;
-		} catch (IOException e) {
-			e.printStackTrace();
-			return null;
-		}*/
+		
 		URL url_value = null;
 		try {
 			url_value = new URL(url);

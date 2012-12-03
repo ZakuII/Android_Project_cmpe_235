@@ -3,28 +3,25 @@
         <item android:id="@+id/menu_camera" 
           android:icon="@drawable/ic_action_camera" 
           android:title="Capture"
-          android:showAsAction="always" android:orderInCategory="1"/>
+          android:showAsAction="always" android:orderInCategory="0"/>
             
         
         
-        <item android:id="@+id/menu_maps" 
+        <item android:id="@+id/menu_cart" android:showAsAction="always" android:title="Shopping Cart" android:icon="@drawable/cart" android:orderInCategory="1"></item><item android:id="@+id/menu_maps" 
             android:title="Maps" 
             android:showAsAction="always" 
             android:icon="@drawable/ic_action_map" android:orderInCategory="2"></item>
         
-        <item android:id="@+id/menu_video" 
-            android:title="Audio" 
-            android:showAsAction="ifRoom" 
+        <item android:id="@+id/menu_sharing" android:icon="@drawable/ic_action_share" android:title="share" android:showAsAction="always" android:actionProviderClass="android.widget.ShareActionProvider" android:visible="true" android:orderInCategory="3" /><item android:id="@+id/menu_video" 
+            android:title="Watch Ad Video" 
+            android:showAsAction="never" 
             android:icon="@drawable/ic_action_dock" android:orderInCategory="3"></item>
         
          
         
-        <item android:id="@+id/menu_sharing"
-          android:icon="@drawable/ic_action_share"
-          android:title="share"
-          android:showAsAction="always"
-          android:actionProviderClass="android.widget.ShareActionProvider" android:visible="true" android:orderInCategory="5"/><item android:id="@+id/menu_audio" android:title="Listen to Ad Audio" android:showAsAction="never" android:icon="@drawable/ic_action_headset" android:orderInCategory="4"></item><item android:id="@+id/menu_login" android:title="Log In" android:showAsAction="never" android:icon="@drawable/ic_action_accounts"></item>
-          <item android:id="@+id/menu_history" android:title="Delete History" android:showAsAction="never"></item>
+        <item android:id="@+id/menu_audio" android:title="Listen to Ad Audio" android:showAsAction="never" android:icon="@drawable/ic_action_headset" android:orderInCategory="4"></item><item android:id="@+id/menu_history" android:title="Delete History" android:showAsAction="never" android:orderInCategory="5"></item><item android:id="@+id/menu_login" android:title="Log In" android:showAsAction="never" android:icon="@drawable/ic_action_accounts" android:orderInCategory="6"></item>
+          
+          
         
         
 </menu>

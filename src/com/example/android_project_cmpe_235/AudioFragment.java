@@ -35,10 +35,15 @@ public class AudioFragment extends Fragment {
 		View mLayout = inflater.inflate(R.layout.fragment_audio, container, false);
 		Bundle bundle = this.getArguments();
 		ResultText = bundle.getString("result");
-		String timeNow = bundle.getString("currentTime");
+		String adDesc = bundle.getString("ResultDesc");
+		String adType = bundle.getString("adType");
+		String adImage = bundle.getString("adImage");
+		//String timeNow = bundle.getString("currentTime");
 		Uri media = Uri.parse(bundle.getString("AudioLink"));
 		
 		TextView adId = (TextView) mLayout.findViewById(R.id.ad_id1);
+		TextView adDescText = (TextView) mLayout.findViewById(R.id.adDescription1);
+		TextView adTypeText = (TextView) mLayout.findViewById(R.id.ad_type1);
 		TextView currentTime = (TextView) mLayout.findViewById(R.id.time_scanned1);
         button = (Button) mLayout.findViewById(R.id.activity_button1);
         Button cancel = (Button) mLayout.findViewById(R.id.cancel_info1);
@@ -49,12 +54,14 @@ public class AudioFragment extends Fragment {
         VideoView audioView = (VideoView) mLayout.findViewById(R.id.audioView);
         
         adId.setText("Ad Id: " + ResultText);
-        currentTime.setText("Time: " + timeNow);
+        adTypeText.setText("Ad Type: " + adType);
+        adDescText.setText(adDesc);
+        currentTime.setText("");
 
         String QrURL = "http://chart.googleapis.com/chart?chs=100x100&cht=qr&chl=" + ResultText;
 	    
         new DownloadImageTask().downloadedImageToView(getActivity(), QrImage, QrURL, QrProgress3);
-        new DownloadImageTask().downloadedImageToView(getActivity(), AdImage, ResultText, QrProgress4);
+        new DownloadImageTask().downloadedImageToView(getActivity(), AdImage, adImage, QrProgress4);
         
 		MediaController mediaCon = new MediaController(getActivity());
 		

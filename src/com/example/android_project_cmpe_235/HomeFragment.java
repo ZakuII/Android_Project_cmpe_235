@@ -43,7 +43,7 @@ public class HomeFragment extends Fragment {
     
     //create empty method for interface    
     public interface ShareStringReturn {
-    	public void ShareReturn(String result);
+    	public void ShareReturn(String result, String AdType, String AdImage, String AdVideo, String AdAudio, String AdDesc);
     }
     
 	@Override
@@ -82,14 +82,23 @@ public class HomeFragment extends Fragment {
 	        public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
 	        	ProductAd productAd = productAds.get(position);
 	    		Bundle bundle = new Bundle();
-	    		String result = productAd.getProductIcon();
+	    		String result = productAd.getAdId();
+	    		String adImage = productAd.getProductIcon();
+	    		String adVideo = productAd.getProductVideo();
+	    		String adAudio = productAd.getProductAudio();
+	    		String adType = productAd.getProductType();
+	    		String adDesc = productAd.getProductDesc();
+	    		
 	    		//send qr result
 	    		bundle.putString("result", result);
+	    		bundle.putString("adType", adType);
+	    		bundle.putString("adImage", adImage);
+	    		bundle.putString("adDesc", adDesc);
 	    		//send timestamp
 	    		bundle.putString("currentTime", productAd.getReadableDate());
 	    		bundle.putLong("unixTime", productAd.getUnixTime());
 	    		//send result to sms manager
-	    		shareStringReturn.ShareReturn(result);
+	    		shareStringReturn.ShareReturn(result, adType, adImage, adVideo, adAudio, adDesc);
 	    		//setShareString(result);
 	    		//switch to product information screen
 	    		InfoFragment infoFragment = new InfoFragment();

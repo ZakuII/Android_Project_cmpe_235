@@ -3,19 +3,25 @@ package com.example.android_project_cmpe_235;
 public class ProductAd {
 	
 	String adId;
+	String adType;
 	String productName;
 	String productImage;
 	String productVideo;
 	String productAudio;
+	String productDesc;
 	String readableDate;
 	long unixTime;
 	
 	public ProductAd() {}
 	
-	public ProductAd(String id, String name, String icon, String date, int unixtime) {
+	public ProductAd(String id, String name, String type, String icon, String audio, String video, String desc, String date, long unixtime) {
 		this.adId = id;
+		this.adType = type;
 		this.productName = name;
 		this.productImage = icon;
+		this.productAudio = audio;
+		this.productVideo = video;
+		this.productDesc = desc;
 		this.readableDate = date;
 		this.unixTime = unixtime;
 	}
@@ -42,6 +48,9 @@ public class ProductAd {
 	public String getProductName() {
 		return this.productName;
 	}
+	public String getProductType() {
+		return this.adType;
+	}
 	public String getProductIcon() {
 		return this.productImage;
 	}
@@ -50,6 +59,9 @@ public class ProductAd {
 	}
 	public String getProductAudio() {
 		return this.productAudio;
+	}
+	public String getProductDesc() {
+		return this.productDesc;
 	}
 	public String getReadableDate() {
 		return this.readableDate;

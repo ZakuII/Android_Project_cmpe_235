@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 public class LogInFragment extends Fragment {
 
@@ -66,6 +67,18 @@ public class LogInFragment extends Fragment {
 				}
 				else {
 					//go to log in screen
+					getUser adUser = new getUser(strUserName.trim(), strPassword.trim());
+					adUser.get();
+					if(adUser.login()) {
+						Toast.makeText(getActivity(), "Logged In Sucessfully", Toast.LENGTH_SHORT).show();
+						FragmentTransaction transaction = getFragmentManager().beginTransaction();
+						transaction.replace(R.id.LayoutFragment, new HomeFragment());
+						transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+						transaction.commit();
+					}
+					else {
+						Toast.makeText(getActivity(), "Log In Failed", Toast.LENGTH_SHORT).show();
+					}
 				}
 				
 			}

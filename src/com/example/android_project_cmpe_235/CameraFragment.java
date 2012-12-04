@@ -23,6 +23,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class CameraFragment extends Fragment {
 	private Camera mCamera;
@@ -167,9 +168,22 @@ public class CameraFragment extends Fragment {
                     SymbolSet syms = scanner.getResults();
                     for (Symbol sym : syms) {
                     	resultText = sym.getData();
-                        scanText.setText("Result: " + resultText);
-                        QrCallback.QrResults(resultText);
-                        barcodeScanned = true;
+                    	getBarcodeFromId barcodeFromId = new getBarcodeFromId(resultText);
+                    	barcodeFromId.get();
+                    	if(barcodeFromId.adValid()) {
+	                        scanText.setText("Result: " + resultText);
+	                        QrCallback.QrResults(resultText);
+	                        barcodeScanned = true;
+                    	}
+                    	else {
+                    		Toast.makeText(getActivity(), "Please scan an AdTouch compatible QR code", Toast.LENGTH_SHORT).show();
+                            barcodeScanned = false;
+                            scanText.setText("Scanning...");
+                            mCamera.setPreviewCallback(previewCb);
+                            mCamera.startPreview();
+                            previewing = true;
+                            mCamera.autoFocus(autoFocusCB);
+                    	}
                     }
                 }
             }

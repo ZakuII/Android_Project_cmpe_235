@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.MediaController;
+import android.widget.TextView;
 import android.widget.VideoView;
 
 public class VideoFragment extends Fragment {
@@ -29,12 +30,15 @@ public class VideoFragment extends Fragment {
 		Bundle bundle = this.getArguments();
 		media = Uri.parse(bundle.getString("Result"));
 		String resultImage = bundle.getString("ResultImage");
+		String resultDesc = bundle.getString("ResultDesc");
 		mediaType = bundle.getInt("MediaType");
 		View mLayout = inflater.inflate(R.layout.fragment_video, container, false);
 		videoView = (VideoView) mLayout.findViewById(R.id.videoView1);
+		TextView videoDesc = (TextView) mLayout.findViewById(R.id.videoAdDescription);
 		ImageView videoImage = (ImageView) mLayout.findViewById(R.id.videoImage);
 		//get Ad Image
 		new DownloadImageTask().downloadedImageToView(getActivity(), videoImage, resultImage, null);
+		videoDesc.setText(resultDesc);
 		//create buttons for playback
 		mediaCon = new MediaController(getActivity());
 		

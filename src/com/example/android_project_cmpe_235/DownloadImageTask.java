@@ -27,7 +27,7 @@ public class DownloadImageTask {
 		Bitmap bitMap;
 		
 		//if image http link
-		if(urlString.contains("http://") && (urlString.contains(".jpg") || urlString.contains(".png"))) {
+		//if(urlString.contains("http://") /*&& (urlString.contains(".jpg") || urlString.contains(".png"))*/) {
 			try {
 				//hash image link to be saved as filename
 				hashString = Base64.encodeObject(urlString);
@@ -45,7 +45,7 @@ public class DownloadImageTask {
 				progressStatus = progressBar;
 				new ImageDownloader().execute(imageView);
 			}
-		}
+		//}
 	}
 	
 	//download image from internet

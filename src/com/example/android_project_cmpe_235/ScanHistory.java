@@ -14,7 +14,11 @@ public class ScanHistory {
 	public static final String KEY_ROWID = "_id";
 	public static final String KEY_ADID = "ad_id";
 	public static final String KEY_NAME = "product_name";
+	public static final String KEY_TYPE = "ad_type";
 	public static final String KEY_ICON = "icon_link";
+	public static final String KEY_AUDIO = "audio_link";
+	public static final String KEY_VIDEO = "video_link";
+	public static final String KEY_DESC = "desc_link";
 	public static final String KEY_TIME = "time_stamp";
 	public static final String KEY_UNIXTIME = "unix_time";
 	
@@ -43,8 +47,12 @@ public class ScanHistory {
 			db.execSQL("CREATE TABLE " + DATABASE_TABLE + " (" +
 					KEY_ROWID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
 					KEY_ADID + " TEXT NOT NULL, " +
+					KEY_TYPE + " TEXT NOT NULL, " +
 					KEY_NAME + " TEXT NOT NULL, " +
 					KEY_ICON + " TEXT NOT NULL, " +
+					KEY_AUDIO + " TEXT NOT NULL, " +
+					KEY_VIDEO + " TEXT NOT NULL, " +
+					KEY_DESC + " TEXT NOT NULL, " +
 					KEY_TIME + " TEXT NOT NULl, " +
 					KEY_UNIXTIME + " INTEGER NOT NULL);"
 			);
@@ -68,11 +76,15 @@ public class ScanHistory {
 		ourHelper.close();
 	}
 	
-	public long createEntry(String name, String ad_id, String image_url, String time, long unix_time) {
+	public long createEntry(String name, String ad_id, String ad_type, String image_url, String ad_audio, String ad_video, String ad_desc, String time, long unix_time) {
 		ContentValues cv = new ContentValues();
 		cv.put(KEY_NAME, name);
+		cv.put(KEY_TYPE, ad_type);
 		cv.put(KEY_ICON, image_url);
 		cv.put(KEY_ADID, ad_id);
+		cv.put(KEY_AUDIO, ad_audio);
+		cv.put(KEY_VIDEO, ad_video);
+		cv.put(KEY_DESC, ad_desc);
 		cv.put(KEY_TIME, time);
 		cv.put(KEY_UNIXTIME, unix_time);
 		return ourDatabase.insert(DATABASE_TABLE, null, cv);
@@ -118,12 +130,12 @@ public class ScanHistory {
 	
 	public List<ProductAd> getHistory() {
 		List<ProductAd> productAdList = new ArrayList<ProductAd>();
-		String[] columns = new String[]{ KEY_ROWID, KEY_ADID, KEY_NAME, KEY_ICON, KEY_TIME, KEY_UNIXTIME };
+		String[] columns = new String[]{ KEY_ROWID, KEY_ADID, KEY_NAME, KEY_TYPE, KEY_ICON, KEY_AUDIO, KEY_VIDEO, KEY_DESC, KEY_TIME, KEY_UNIXTIME };
 		Cursor c = ourDatabase.query(DATABASE_TABLE, columns, null, null, null, null, KEY_UNIXTIME + " DESC", "10");
 		
 		if(c.moveToFirst()) {
 			do {
-				ProductAd productAd = new ProductAd(c.getString(1),c.getString(2),c.getString(3),c.getString(4),c.getInt(5));
+				ProductAd productAd = new ProductAd(c.getString(1),c.getString(2),c.getString(3),c.getString(4),c.getString(5),c.getString(6),c.getString(7),c.getString(8),c.getLong(9));
 				productAdList.add(productAd);
 			
 			} while (c.moveToNext());
@@ -136,8 +148,12 @@ public class ScanHistory {
 		ourDatabase.execSQL("CREATE TABLE " + DATABASE_TABLE + " (" +
 				KEY_ROWID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
 				KEY_ADID + " TEXT NOT NULL, " +
+				KEY_TYPE + " TEXT NOT NULL, " +
 				KEY_NAME + " TEXT NOT NULL, " +
 				KEY_ICON + " TEXT NOT NULL, " +
+				KEY_AUDIO + " TEXT NOT NULL, " +
+				KEY_VIDEO + " TEXT NOT NULL, " +
+				KEY_DESC + " TEXT NOT NULL, " +
 				KEY_TIME + " TEXT NOT NULl, " +
 				KEY_UNIXTIME + " INTEGER NOT NULL);"
 		);

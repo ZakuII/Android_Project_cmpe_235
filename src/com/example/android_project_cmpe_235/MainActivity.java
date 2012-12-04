@@ -22,7 +22,8 @@ public class MainActivity extends BaseActivity implements CameraFragment.QrResul
 
 	ShareActionProvider mShareActionProvider;
 	String ResultText = null, merchantAddress = "1+Washington+Sq+San+Jose";
-	String timeNow;
+	String timeNow, adImageLink, adVideoLink, adAudioLink, adDesc, adName, adType, adWebLink;
+	float adLocationLat, adLocationLong;
 	long unixTime;
 	Time currentTime;
 	
@@ -62,6 +63,9 @@ public class MainActivity extends BaseActivity implements CameraFragment.QrResul
 			return true;
 			
 		case R.id.menu_maps:
+			//use adLocationLat
+			//use adLocationLong
+			
 			String uri = "geo:0,0?q=" + merchantAddress;
 			Intent intent = new Intent(android.content.Intent.ACTION_VIEW, Uri.parse(uri));
 			intent.setClassName("com.google.android.apps.maps", "com.google.android.maps.MapsActivity");
@@ -76,7 +80,10 @@ public class MainActivity extends BaseActivity implements CameraFragment.QrResul
 			if(ResultText != null) {
 				Bundle bundle = new Bundle();
 				//send qr result
-				bundle.putString("AudioLink", "http://robtowns.com/music/blind_willie.mp3");
+				bundle.putString("AudioLink", adAudioLink);
+				bundle.putString("ResutDesc", adDesc);
+				bundle.putString("adType", adType);
+				bundle.putString("adImage", adImageLink);
 				bundle.putString("result", ResultText);
 				//send timestamp
 				bundle.putString("currentTime", timeNow);
@@ -87,8 +94,9 @@ public class MainActivity extends BaseActivity implements CameraFragment.QrResul
 		case R.id.menu_video:
 			if(ResultText != null) {
 				Bundle bundle = new Bundle();
-				bundle.putString("ResultImage", ResultText);
-				bundle.putString("Result", "http://static.bouncingminds.com/ads/30secs/bigger_badminton_600.mp4");
+				bundle.putString("ResultImage", adImageLink);
+				bundle.putString("ResultDesc", adDesc);
+				bundle.putString("Result", adVideoLink);
 				SwitchFragment(new VideoFragment(), bundle);
 			}
 			return true;
@@ -107,6 +115,23 @@ public class MainActivity extends BaseActivity implements CameraFragment.QrResul
 		// TODO Auto-generated method stub
 		//get timestamp
 		ResultText = result;
+		//fetch ad info from rest api
+		getBarcodeFromId barcodeFromId = new getBarcodeFromId(ResultText);
+		barcodeFromId.get();
+		//adName = barcodeFromId.product_title;
+		adImageLink = barcodeFromId.getImageLink();
+		adVideoLink = barcodeFromId.getVideoLink();
+		adAudioLink = barcodeFromId.getAudioLink();
+		adDesc  = barcodeFromId.printProductInfo();
+		adName = barcodeFromId.getUdfid();
+		adType = barcodeFromId.getAdType();
+		adWebLink = barcodeFromId.getLinkURL();
+		
+		getLocation adLocation = new getLocation(result);
+		adLocation.get();
+		adLocationLat = adLocation.getLatitude();
+		adLocationLong = adLocation.getLongitude();
+
 		currentTime = new Time(Time.getCurrentTimezone());
 		currentTime.setToNow();
 		timeNow = currentTime.format("%m/%d/%y %I:%M %p");
@@ -116,14 +141,22 @@ public class MainActivity extends BaseActivity implements CameraFragment.QrResul
 		
 		Bundle bundle = new Bundle();
 		//send qr result
-		bundle.putString("result", result);
+		//adImageLink = "http://adtouch.cloudfoundry.com/files/ad/a702be73d9f44689ab46a897efee27ab.image.png";
+		bundle.putString("result", ResultText);
+		bundle.putString("adVideo", adVideoLink);
+		bundle.putString("adAudio", adAudioLink);
+		bundle.putString("adImage", adImageLink);
+		bundle.putString("adDesc", adDesc);
+		bundle.putString("adName", adName);
+		bundle.putString("adType", adType);
+		bundle.putString("adWebLink", adWebLink);
 		//send timestamp
 		bundle.putString("currentTime", timeNow);
 		//send result to sms manager
 		setShareString(result);
 		//add entry to recent history
 	    entry.open();
-	    entry.createEntry(result, QrURL, result, timeNow, unixTime);
+	    entry.createEntry(adName, ResultText, adType, adImageLink, adAudioLink, adVideoLink, adDesc, timeNow, unixTime);
 	    entry.close();
 	    //switch to product information screen
 		SwitchFragment(new InfoFragment(), bundle);
@@ -179,9 +212,14 @@ public class MainActivity extends BaseActivity implements CameraFragment.QrResul
 	}
 
 	@Override
-	public void ShareReturn(String result) {
+	public void ShareReturn(String result, String AdType, String AdImage, String AdVideo, String AdAudio, String AdDesc) {
 		// TODO Auto-generated method stub
 		ResultText = result;
+		adType = AdType;
+		adImageLink = AdImage;
+		adVideoLink = AdVideo;
+		adAudioLink = AdAudio;
+		adDesc = AdDesc;
 		setShareString(result);
 	}
 
